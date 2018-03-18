@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     3rdparty/RF24.cpp \
     3rdparty/utility/RPi/bcm2835.c \
     3rdparty/utility/RPi/interrupt.cpp \
-    nrf24l01worker.cpp
+    nrf24l01worker.cpp \
+    nrf24l01controller.cpp
 
 HEADERS += \
     3rdparty/utility/RPi/bcm2835.h \
@@ -27,7 +28,8 @@ HEADERS += \
     3rdparty/printf.h \
     3rdparty/RF24.h \
     3rdparty/RF24_config.h \
-    nrf24l01worker.h
+    nrf24l01worker.h \
+    nrf24l01controller.h
 
 
 
