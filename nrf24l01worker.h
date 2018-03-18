@@ -3,21 +3,22 @@
 
 #include <QObject>
 #include <QThread>
+#include <QDebug>
 
 #include "3rdparty/RF24.h"
 #include "3rdparty/RF24_config.h"
 
-class nrf24l01Worker : public QObject
+class NRF24L01worker : public QObject
 {
     Q_OBJECT
 public:
-     nrf24l01Worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed);
+     NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed);
 
 private:
      RF24 * radio;
-     QThread *radioThread;
-     bool isAvailable();
-     bool isAvailable(uint8_t *pipeNum);
+     void receivingLoop();
+
+     
 
 
 signals:
@@ -26,7 +27,9 @@ signals:
 public slots:
     bool connectToRadio();
     void selectSendingPipes(const uint8_t * adress);
-    void selectRecevingPipes(int number, const uint8_t * adress);
+    void selectRecevingPipes(int number, const uint64_t adress);
+
+    
 
 
 
