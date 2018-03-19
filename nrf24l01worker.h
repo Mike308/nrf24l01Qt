@@ -28,6 +28,7 @@ public slots:
     bool connectToRadio();
     void selectSendingPipes(const uint8_t * adress);
     void selectRecevingPipes(int number, const uint64_t adress);
+    void selectRecevingPipes(int number, const uint8_t * adress);
 
     
 

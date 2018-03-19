@@ -18,6 +18,7 @@ public:
     bool connectToRadio();
     void selectSendingPipes(const uint8_t * adress);
     void selectRecevingPipes(int number, const uint64_t  adress);
+    void selectRecevingPipes(int number, const uint8_t * adress);
 
 private:
     NRF24L01worker *workerObject;
@@ -28,6 +29,12 @@ signals:
     bool connectToRadioSignal();
     void selectSendingPipesSignal(const uint8_t * adress);
     void selectRecevingPipesSingal(int number, const uint64_t adress);
+    void selectRecevingPipesSingal(int number, const uint8_t * adress);
+    void onDataReceived(QString data, uint8_t pipeNum);
+
+public slots:
+
+    void dataReceived(QString data, uint8_t pipeNum);
 
 
 

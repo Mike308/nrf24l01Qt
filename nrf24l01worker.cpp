@@ -3,7 +3,6 @@
 NRF24L01worker::NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed)
 {
     radio = new RF24(cePin,csPin, spiSpeed);
-    this->radioConnected = false;
 
 
 }
@@ -26,6 +25,12 @@ void NRF24L01worker::selectSendingPipes(const uint8_t *adress){
 void NRF24L01worker::selectRecevingPipes(int number, const uint64_t adress){
     
     radio->openReadingPipe(number, adress);
+}
+
+void NRF24L01worker::selectRecevingPipes(int number, const uint8_t * adress){
+
+    radio->openReadingPipe(number, adress);
+
 }
 
 void NRF24L01worker::receivingLoop(){
