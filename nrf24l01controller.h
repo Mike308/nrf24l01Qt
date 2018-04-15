@@ -15,7 +15,8 @@ class NRF24L01Controller : public QObject
 
 public:
     NRF24L01Controller(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed);
-    bool connectToRadio();
+    NRF24L01Controller(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<QString> receivingPipesList);
+    void connectToRadio();
     void selectSendingPipes(const uint8_t * adress);
     void selectRecevingPipes(int number, const uint64_t  adress);
     void selectRecevingPipes(int number, const uint8_t * adress);

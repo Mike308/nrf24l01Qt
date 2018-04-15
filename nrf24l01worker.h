@@ -13,10 +13,20 @@ class NRF24L01worker : public QObject
     Q_OBJECT
 public:
      NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed);
+     NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, uint64_t * receivingPipes);
+     NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<QString> receivingPipesList);
+     NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, uint64_t * receivingPipes, uint64_t * sendingPipes);
+
 
 private:
      RF24 * radio;
+     QList <QString>  receivingPipesList;
+     int cnt = 0;
+     void selectRecevingPipes(int number, const uint8_t * adress);
      void receivingLoop();
+     void setRecevingPipes();
+
+
 
      
 
@@ -27,8 +37,7 @@ signals:
 public slots:
     bool connectToRadio();
     void selectSendingPipes(const uint8_t * adress);
-    void selectRecevingPipes(int number, const uint64_t adress);
-    void selectRecevingPipes(int number, const uint8_t * adress);
+
 
     
 
