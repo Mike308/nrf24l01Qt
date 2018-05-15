@@ -53,7 +53,6 @@ void NRF24L01worker::selectRecevingPipes(int number, uint64_t  adress){
 }
 
 void NRF24L01worker::sendDataSlot(QString data){
-    this->helper = false;
     qDebug () << "Sending data...: " << data;
     char * buf;
     QByteArray ba = data.toLatin1();
@@ -62,8 +61,6 @@ void NRF24L01worker::sendDataSlot(QString data){
     radio->powerDown();
     radio->powerUp();
     radio->write(buf, 128);
-    this->helper = true;
-    qDebug () << this->helper;
     radio->startListening();
 }
 
