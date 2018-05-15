@@ -15,38 +15,17 @@ class NRF24L01worker : public QObject
 {
     Q_OBJECT
 public:
-     NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed);
-     NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, uint64_t * receivingPipes);
-     NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<uint64_t> receivingPipesList);
-     NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<uint64_t> receivingPipesList, uint64_t sendingPipe);
-     NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, uint64_t * receivingPipes, uint64_t * sendingPipes);
-
+    NRF24L01worker(RF24 * radio);
 
 private:
-     RF24 * radio;
-     QList <uint64_t> receivingPipesList;
-     int cnt = 0;
-     int testCnt = 0;
-     void selectRecevingPipes(int number, uint64_t adress);
-     void receivingLoop();
-     void setRecevingPipes();
-     uint64_t sendingPipe;
-     bool helper;
-     void openWritePipe(uint64_t address);
-
-
-
-     
-
+    RF24 * radio;
 
 signals:
-     void dataReceived(QString data, uint8_t pipeNum);
+    void dataReceived(QString data, uint8_t pipeNum);
 
 public slots:
-    bool connectToRadio();
-    void selectSendingPipes(uint64_t  adress);
-    void sendDataSlot(QString data);
-    void test();
+    void receivingLoop();
+
 
 
 

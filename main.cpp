@@ -19,8 +19,10 @@ int main(int argc, char *argv[])
     NRF24L01Controller radio(RPI_V2_GPIO_P1_15, BCM2835_SPI_CS0, BCM2835_SPI_SPEED_8MHZ);
     radio.connectToRadio();
     radio.selectSendingPipes(0xF0F0F0F0E101);
-    radio.sendMessage("Test1");
-    radio.sendMessage("Test2");
+    radio.selectRecevingPipe(1, 0xF0F0F0F0F101);
+    radio.sendData("Test1");
+    radio.sendData("Test2");
+    radio.startListening();
     qDebug () << "Test...";
 
 
