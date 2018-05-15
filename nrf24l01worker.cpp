@@ -8,9 +8,15 @@ NRF24L01worker::NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed
 }
 
 
-NRF24L01worker::NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<QString> receivingPipesList){
+
+NRF24L01worker::NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<uint64_t> receivingPipesList){
     radio = new RF24(cePin, csPin, spiSpeed);
     this->receivingPipesList.append(receivingPipesList);
+}
+NRF24L01worker::NRF24L01worker(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<uint64_t> receivingPipesList, uint64_t sendingPipe){
+    radio = new RF24(cePin, csPin, spiSpeed);
+    this->receivingPipesList.append(receivingPipesList);
+    this->sendingPipe = sendingPipe;
 }
 
 
@@ -21,22 +27,44 @@ bool NRF24L01worker::connectToRadio(){
     qDebug () << "Connecting to radio...";
     bool result = radio->begin();
     radio->printDetails();
+    this->openWritePipe(sendingPipe);
+    this->sendDataSlot("AT+START: "+ QTime::currentTime().toString());
+    this->sendDataSlot("AT+START2: " + QTime::currentTime().toString());
+    this->helper = true;
     this->receivingLoop();
     return result;
-
-    
 }
 
-void NRF24L01worker::selectSendingPipes(const uint8_t *adress){
-    
-    radio->openWritingPipe(adress);
+void NRF24L01worker::openWritePipe(uint64_t address){
+    qDebug() << "Opening writing pipe: " << address;
+    radio->openWritingPipe(address);
+}
+
+void NRF24L01worker::selectSendingPipes(uint64_t address){
+
 }
 
 
-void NRF24L01worker::selectRecevingPipes(int number, const uint8_t * adress){
+void NRF24L01worker::selectRecevingPipes(int number, uint64_t  adress){
 
     radio->openReadingPipe(number, adress);
+    qDebug() << "Selected for: " << QString::number(adress,16).toUpper()  <<"no: " << number;
 
+}
+
+void NRF24L01worker::sendDataSlot(QString data){
+    this->helper = false;
+    qDebug () << "Sending data...: " << data;
+    char * buf;
+    QByteArray ba = data.toLatin1();
+    buf = ba.data();
+    radio->stopListening();
+    radio->powerDown();
+    radio->powerUp();
+    radio->write(buf, 128);
+    this->helper = true;
+    qDebug () << this->helper;
+    radio->startListening();
 }
 
 void NRF24L01worker::receivingLoop(){
@@ -44,52 +72,44 @@ void NRF24L01worker::receivingLoop(){
 
 
     char msg[] = "";
-    uint8_t pipeNum;
+    uint8_t pipeNum = 0;
     int len = 0;
 
-    for (int i = 0; i < receivingPipesList.size(); i++){
 
+    for (int i = 0; i < receivingPipesList.size(); i++){
         qDebug () << "Pipe: " << receivingPipesList[i];
-        QByteArray adress = receivingPipesList[i].toLatin1();
-        this->selectRecevingPipes(i+1, (uint8_t*)receivingPipesList[i].toLocal8Bit().data());
+        this->selectRecevingPipes(i+2, receivingPipesList[i]);
     }
 
-    qDebug () << "Start listening...";
 
+
+    qDebug () << "Start listening...";
     radio->startListening();
+
 
 
     while(1){
 
-        while(radio->available(&pipeNum)){
+        QThread::sleep(1);
 
-            if (pipeNum == 1){
-                len = radio->getDynamicPayloadSize();
-                radio->read(&msg, len);
-                QString stringMsg = QString(msg);
-                qDebug () << "Received data from pipe 1: " << stringMsg;
-                emit dataReceived(stringMsg, pipeNum);
-                QThread::sleep(1);
-
-            }else {
-
-                len = radio->getDynamicPayloadSize();
-                radio->read(&msg, len);
-                QString stringMsg = QString(msg);
-                qDebug () << "Received data from other one: " << stringMsg;
-                emit dataReceived(stringMsg, pipeNum);
-                QThread::sleep(1);
+        while(radio->available(&pipeNum) && this->helper == true){
+            len = radio->getDynamicPayloadSize();
+            radio->read(&msg, len);
+            QString stringMsg = QString(msg);
+            emit dataReceived(stringMsg, pipeNum);
+            testCnt++;
+       }
 
 
-            }
-
-
-        }
 
     }
 
 
 
+}
+
+void NRF24L01worker::test(){
+    qDebug () << "TEST.....";
 }
 
 

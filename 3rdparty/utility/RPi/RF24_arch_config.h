@@ -29,9 +29,9 @@
   #define strlen_P strlen
   #define PROGMEM
   #define PRIPSTR "%s"
-
+  //#define SERIAL_DEBUG
   #ifdef SERIAL_DEBUG
-	#define IF_SERIAL_DEBUG(x) ({x;})
+    #define IF_SERIAL_DEBUG(x) ({x;})
   #else
 	#define IF_SERIAL_DEBUG(x)
   #endif

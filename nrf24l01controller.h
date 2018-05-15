@@ -15,11 +15,10 @@ class NRF24L01Controller : public QObject
 
 public:
     NRF24L01Controller(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed);
-    NRF24L01Controller(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<QString> receivingPipesList);
-    void connectToRadio();
-    void selectSendingPipes(const uint8_t * adress);
-    void selectRecevingPipes(int number, const uint64_t  adress);
-    void selectRecevingPipes(int number, const uint8_t * adress);
+    NRF24L01Controller(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<uint64_t> receivingPipesList);
+    NRF24L01Controller(uint16_t cePin, uint16_t csPin, uint32_t spiSpeed, QList<uint64_t> receivingPipesList, uint64_t sendingPipe);
+
+
 
 private:
     NRF24L01worker *workerObject;
@@ -28,15 +27,20 @@ private:
 signals:
 
     bool connectToRadioSignal();
-    void selectSendingPipesSignal(const uint8_t * adress);
+    void selectSendingPipesSignal(uint64_t address);
     void selectRecevingPipesSingal(int number, const uint64_t adress);
     void selectRecevingPipesSingal(int number, const uint8_t * adress);
     void onDataReceived(QString data, uint8_t pipeNum);
+    void sendMessageSignal(QString message);
+    void testSingal();
 
 public slots:
 
     void dataReceived(QString data, uint8_t pipeNum);
-
+    void connectToRadio();
+    void selectSendingPipes(uint64_t address);
+    void sendMessage(QString message);
+    void testSlot();
 
 
 
