@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     3rdparty/utility/RPi/interrupt.cpp \
     nrf24l01worker.cpp \
     nrf24l01controller.cpp \
-    nrf24l01network.cpp
+    nrf24l01network.cpp \
+    example.cpp
 
 HEADERS += \
     3rdparty/utility/RPi/bcm2835.h \
@@ -31,7 +32,8 @@ HEADERS += \
     3rdparty/RF24_config.h \
     nrf24l01worker.h \
     nrf24l01controller.h \
-    nrf24l01network.h
+    nrf24l01network.h \
+    example.h
 
 
 

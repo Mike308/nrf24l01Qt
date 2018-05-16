@@ -19,9 +19,12 @@ public:
 
 private:
     RF24 * radio;
+    enum {receivingData, receivingFinished};
 
 signals:
     void dataReceived(QString data, uint8_t pipeNum);
+    void updatedStatus(int status);
+
 
 public slots:
     void receivingLoop();
